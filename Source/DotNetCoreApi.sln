@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCoreApi", "DotNetCoreApi\DotNetCoreApi.csproj", "{07B59721-388A-454C-A4FE-5367EB79C464}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCoreApi", "DotNetCoreApi\DotNetCoreApi.csproj", "{07B59721-388A-454C-A4FE-5367EB79C464}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{0CD3B78F-EAAA-40F9-BA05-6BE52CA3BF45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{07B59721-388A-454C-A4FE-5367EB79C464}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07B59721-388A-454C-A4FE-5367EB79C464}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07B59721-388A-454C-A4FE-5367EB79C464}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CD3B78F-EAAA-40F9-BA05-6BE52CA3BF45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CD3B78F-EAAA-40F9-BA05-6BE52CA3BF45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CD3B78F-EAAA-40F9-BA05-6BE52CA3BF45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CD3B78F-EAAA-40F9-BA05-6BE52CA3BF45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
