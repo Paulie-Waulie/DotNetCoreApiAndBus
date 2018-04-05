@@ -1,7 +1,7 @@
-﻿namespace Contracts.Api
+﻿namespace DotNetCoreApi.Contracts
 {
-    using Models;
-    
+    using global::Contracts.Models;
+
     public class Payment
     {
         // NOTE: In reality we would want to use different models for our Api than to our messaging
