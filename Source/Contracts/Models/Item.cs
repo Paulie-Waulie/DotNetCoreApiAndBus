@@ -4,14 +4,17 @@
 
     public class Item
     {
-        public Item(string description, int quantity, decimal amount)
+        public Item(string name, string sku, int quantity, decimal amount)
         {
-            Description = description ?? throw new ArgumentNullException(nameof(description));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Sku = sku ?? throw new ArgumentNullException(nameof(sku));
             Quantity = quantity;
             Amount = amount;
         }
 
-        public string Description { get; set; }
+        public string Name { get; set; }
+
+        public string Sku { get; set; } 
 
         public int Quantity { get; set; }
 

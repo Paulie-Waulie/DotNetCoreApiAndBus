@@ -1,31 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace DotNetCoreApi.Controllers
+﻿namespace DotNetCoreApi.Controllers
 {
+    using System.Threading.Tasks;
+    using Contracts;
+    using Microsoft.AspNetCore.Mvc;
+    using Service;
+
     [Route("api/[controller]")]
     public class PaymentsController : Controller
     {
-        // GET api/values/5
+        private readonly IPaymentService paymentService;
+
+        public PaymentsController(IPaymentService paymentService)
+        {
+            this.paymentService = paymentService;
+        }
+
         [HttpGet("{id}")]
-        public string Get(string id)
+        public Payment Get(string id)
         {
-            return "value";
+            return new Payment();
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(string id, [FromBody]string value)
+        [HttpPut("{paymentReference}")]
+        public async Task<CreatedAtActionResult> Put(string paymentReference, [FromBody]Payment value)
         {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var redirect = await this.paymentService.RegisterAttempt(paymentReference, value);
+            return this.CreatedAtAction("Get", new { id = paymentReference } ,redirect);
         }
     }
 }

@@ -4,7 +4,7 @@
 
     public class Payment
     {
-        // NOTE: In reality we would want to use different models for our Api than to our messaging
+        // NOTE: In reality we would want to use different models for our Api than to our messaging, domain and data access.
         public Transaction Transaction { get; set; }
 
         public Address BillingAddress { get; set; }

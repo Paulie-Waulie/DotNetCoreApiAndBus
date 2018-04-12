@@ -1,0 +1,31 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Payment Spike",
+		"_postman_id": "ac08dcf6-879d-8864-c5ef-c64ab1eed608",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New Payment",
+			"request": {
+				"url": "http://localhost:9136/api/payments/a99b1aa8-625b-4aa3-b8dd-b7eda5f8c4f8",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"customer\": {\r\n    \"emailAddress\": \"customer@home.co.uk\",\r\n    \"dateOfBirth\": {\r\n      \"day\": 4,\r\n      \"month\": 8,\r\n      \"year\": 1999\r\n     }\r\n  },\r\n  \"billingAddress\": {\r\n    \"firstName\": \"Jo\",\r\n    \"lastName\": \"Blogs\",\r\n    \"telephoneMobile\": \"07971 185432\",\r\n    \"address1\": \"99 Lets Be Avenue\",\r\n    \"address2\": \"Up-Town\",\r\n    \"address3\": \"Around-Town\",\r\n    \"locality\": \"London\",\r\n    \"postalCode\": \"NW6 7YT\",\r\n    \"country\": \"GB\"\r\n  },\r\n  \"transaction\": {\r\n    \"currency\": \"GBP\"\r\n  },\r\n  \"items\": [\r\n    {\r\n      \"sku\": \"12345\",\r\n      \"name\": \"T-Shirt\",\r\n      \"quantity\": 1,\r\n      \"amount\": 9.99\r\n    }\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

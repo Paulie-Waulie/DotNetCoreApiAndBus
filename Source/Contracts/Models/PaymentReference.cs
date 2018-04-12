@@ -9,6 +9,11 @@
             this.Value = value;
         }
 
+        public PaymentReference(string value)
+            :this(Guid.Parse(value))
+        {
+        }
+
         public Guid Value { get; }
 
         public static PaymentReference Create()
