@@ -1,8 +1,5 @@
 ﻿namespace DotNetCoreApi.Configuration
 {
-    using Exceptions;
-    using Microsoft.Extensions.Configuration;
-
     public class ServerSettings
     {
         public int Port { get; set; }

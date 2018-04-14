@@ -1,29 +1,33 @@
 ﻿namespace DotNetCoreApi.Data
 {
     using System.Threading.Tasks;
+    using Configuration;
     using Contracts;
     using global::Contracts.Models;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
+    using Microsoft.Extensions.Options;
 
     public interface ISavePaymentCommand
     {
         Task Save(PaymentReference paymentReference, Payment payment);
     }
 
-    public class SavePaymentCommand : ISavePaymentCommand
+    internal class SavePaymentCommand : ISavePaymentCommand
     {
-        private readonly IDocumentClient documentClient;
+        private readonly IDocumentClient documentClientFactory;
+        private readonly DocumentDbSettings dbSettings;
 
-        public SavePaymentCommand(IDocumentClient documentClient)
+        public SavePaymentCommand(IDocumentClientFactory documentClientFactory, IOptions<DocumentDbSettings> dbSettings)
         {
-            this.documentClient = documentClient;
+            this.dbSettings = dbSettings.Value;
+            this.documentClientFactory = documentClientFactory.Create(this.dbSettings).Result;
         }
 
         public Task Save(PaymentReference paymentReference, Payment payment)
         {
-            var documentUri = UriFactory.CreateDocumentCollectionUri(DocumentDbSettings.DatabaseId, DocumentDbSettings.CollectionId);
-            return this.documentClient.CreateDocumentAsync(documentUri, payment);
+            var documentUri = UriFactory.CreateDocumentCollectionUri(this.dbSettings.DatabaseId, this.dbSettings.CollectionId);
+            return this.documentClientFactory.CreateDocumentAsync(documentUri, payment);
         }
     }
 }

@@ -15,6 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="KestrelServerOptionsExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.9.1" />
   </ItemGroup>

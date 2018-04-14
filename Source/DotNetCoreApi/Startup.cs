@@ -24,10 +24,15 @@
         {
             services.AddMvc();
 
+            services.Configure<DocumentDbSettings>(options =>
+            {
+               Configuration.BindOrThrow("DocumentDB", options);
+            });
+
             services.AddSingleton<IPaymentService, PaymentService>()
                 .AddSingleton<IGetPaymentProviderRedirectQuery, GetPaymentProviderRedirectQuery>()
                 .AddSingleton<ISavePaymentCommand, SavePaymentCommand>()
-                .AddSingleton<IDocumentClient>(DocumentClientFactory.Create(Configuration).Result);
+                .AddSingleton<IDocumentClientFactory, DocumentClientFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

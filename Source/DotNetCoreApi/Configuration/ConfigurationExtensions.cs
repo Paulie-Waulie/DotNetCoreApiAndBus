@@ -1,18 +1,21 @@
-﻿using System.Linq;
-using DotNetCoreApi.Exceptions;
-using Microsoft.Extensions.Configuration;
-
-public static class ConfigurationExtensions
+﻿namespace DotNetCoreApi.Configuration
 {
-    public static void BindOrThrow(this IConfiguration configuration, string key, object instance)
+    using System.Linq;
+    using Exceptions;
+    using Microsoft.Extensions.Configuration;
+
+    public static class ConfigurationExtensions
     {
-        if (configuration.GetChildren().Any(x => x.Key.Equals(key)))
+        public static void BindOrThrow(this IConfiguration configuration, string key, object instance)
         {
-            configuration.GetSection(key).Bind(instance);
-        }
-        else
-        {
-            throw new ConfigurationSectionMissingException(key);
+            if (configuration.GetChildren().Any(x => x.Key.Equals(key)))
+            {
+                configuration.GetSection(key).Bind(instance);
+            }
+            else
+            {
+                throw new ConfigurationSectionMissingException(key);
+            }
         }
     }
 }
