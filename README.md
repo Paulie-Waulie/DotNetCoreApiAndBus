@@ -1,6 +1,6 @@
 # Dot Net Core Demo Api & Bus
 
-A simple demo app to highlight certain features of using dotnet core for a Web Api project. The demo solution will contain a Web Api project which utilises certain 
+A simple demo app to highlight certain features of using dotnet core and dotnet standard for a Web Api project. The demo solution will contain a Web Api project which utilises certain Azure resources such as Cosmos DB, Key Vault, Azure Service Bus etc. The solution will contain multiple components, a front end Api and some backend processing components. There is also a load generating tool to demonstrate the solution with continous user load.
 
 ## Components
 
