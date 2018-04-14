@@ -1,6 +1,5 @@
 ﻿namespace DotNetCoreApi.Configuration
 {
-    using System;
     using System.Threading.Tasks;
     using Data;
     using Microsoft.Azure.Documents;
