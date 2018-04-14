@@ -20,17 +20,32 @@
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, builder) =>
                 {
-                    configuration = builder.Build();
-                    var environment = hostingContext.HostingEnvironment;
-
-                    if (environment.IsDevelopment())
-                    {
-                        builder.AddUserSecrets(Assembly.Load(new AssemblyName(environment.ApplicationName)), optional: true);
-                    }
+                    configuration = BuildAppConfiguration(builder, hostingContext);
                 })
                 .UseStartup<Startup>()
                 .UseKestrel(options => options.Configure(configuration))
                 .Build();
+        }
+
+        private static IConfiguration BuildAppConfiguration(IConfigurationBuilder builder, WebHostBuilderContext hostingContext)
+        {
+            IConfiguration configuration = builder.Build();
+            var environment = hostingContext.HostingEnvironment;
+
+            if (environment.IsDevelopment())
+            {
+                builder.AddUserSecrets(Assembly.Load(new AssemblyName(environment.ApplicationName)), optional: true);
+            }
+
+            KeyVaultSettings keyVaultSettings = new KeyVaultSettings();
+            configuration.BindOrThrow("KeyVaultSettings", keyVaultSettings);
+
+            builder.AddAzureKeyVault(
+                keyVaultSettings.DnsName,
+                keyVaultSettings.AppUserClientId,
+                keyVaultSettings.AppUserClientSecret);
+
+            return configuration;
         }
     }
 }

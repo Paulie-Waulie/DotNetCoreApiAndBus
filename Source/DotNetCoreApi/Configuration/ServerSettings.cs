@@ -1,5 +1,7 @@
 ﻿namespace DotNetCoreApi.Configuration
 {
+    using System;
+
     public class ServerSettings
     {
         public int Port { get; set; }

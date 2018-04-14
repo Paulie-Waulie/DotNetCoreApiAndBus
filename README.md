@@ -10,6 +10,8 @@ TODO
 
 TODO
 
+For help with settings up KeyVault and AD App Registrations see: https://docs.microsoft.com/en-gb/azure/key-vault/key-vault-get-started
+
 ## ARM Template
 
 TODO
@@ -21,14 +23,17 @@ To help support local development, when the app runs within a development enviro
 Api Project:
 
 {
-    "DocumentDB": {
-        "EndpointUri": "The address of your Cosmos account",
-        "AuthKey": "The Auth Key of your Cosmos account"
+    "KeyVaultSettings": {
+        "DnsName": "The DNS name of your key vault",
+        "AppUserClientId": "Your Azure AD App Registration Application ID",
+        "AppUserClientSecret": "Your Azure AD App Registration Key"
     },
     "ServerSettings": {
         "ApiCertificateThumbprint": "The thumbprint of your TLS certificate, if using Https"
     }
 }
+
+For more information see: https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.1&tabs=visual-studio
 
 ## License
 
