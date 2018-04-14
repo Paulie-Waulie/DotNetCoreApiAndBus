@@ -10,7 +10,7 @@
 
     internal static class DocumentClientFactory
     {
-        internal async static Task<IDocumentClient> Create(IConfiguration configuration)
+        internal static async Task<IDocumentClient> Create(IConfiguration configuration)
         {
             var endpoint = new Uri(configuration["DocumentDB:EndpointUri"]);
             var authKey = configuration["DocumentDB:AuthKey"];
