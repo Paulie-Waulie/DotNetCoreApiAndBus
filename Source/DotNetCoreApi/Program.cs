@@ -1,5 +1,6 @@
 ﻿namespace DotNetCoreApi
 {
+    using System.Reflection;
     using Configuration;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
@@ -17,9 +18,15 @@
             IConfiguration configuration = null;
 
             return WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(builder =>
+                .ConfigureAppConfiguration((hostingContext, builder) =>
                 {
                     configuration = builder.Build();
+                    var environment = hostingContext.HostingEnvironment;
+
+                    if (environment.IsDevelopment())
+                    {
+                        builder.AddUserSecrets(Assembly.Load(new AssemblyName(environment.ApplicationName)), optional: true);
+                    }
                 })
                 .UseStartup<Startup>()
                 .UseKestrel(options => options.Configure(configuration))

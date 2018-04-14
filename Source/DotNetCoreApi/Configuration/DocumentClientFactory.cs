@@ -17,7 +17,7 @@
         {
             var client = new DocumentClient(dbSettings.EndpointUri, dbSettings.AuthKey);
 
-            Uri databaseUri = UriFactory.CreateDatabaseUri(dbSettings.DatabaseId);
+            var databaseUri = UriFactory.CreateDatabaseUri(dbSettings.DatabaseId);
 
             await client.CreateDatabaseIfNotExistsAsync(new Database { Id = dbSettings.DatabaseId });
             await client.CreateDocumentCollectionIfNotExistsAsync(databaseUri, new DocumentCollection { Id = dbSettings.CollectionId });
