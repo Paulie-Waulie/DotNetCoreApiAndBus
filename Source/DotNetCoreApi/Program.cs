@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
 
     public class Program
     {
@@ -24,18 +25,25 @@
                 })
                 .UseStartup<Startup>()
                 .UseKestrel(options => options.Configure(configuration))
+                .UseApplicationInsights()
                 .Build();
         }
 
         private static IConfiguration BuildAppConfiguration(IConfigurationBuilder builder, WebHostBuilderContext hostingContext)
         {
-            IConfiguration configuration = builder.Build();
             var environment = hostingContext.HostingEnvironment;
+            IConfiguration configuration = builder.Build();
 
             if (environment.IsDevelopment())
             {
                 builder.AddUserSecrets(Assembly.Load(new AssemblyName(environment.ApplicationName)), optional: true);
             }
+
+            // TODO : Work out why the instrumentation key below is ignored, the correct instrumentation key seems to be only
+            // set if it is present in the appsettings.json or is passed to the overloaded extensions method on IWebHostBuilder called UseApplicationInsights.
+            var applicationInsightsSettings = new ApplicationInsightsSettings();
+            configuration.BindOrThrow("ApplicationInsights", applicationInsightsSettings);
+            builder.AddApplicationInsightsSettings(developerMode: environment.IsDevelopment(), instrumentationKey: applicationInsightsSettings.InstrumentationKey);
 
             KeyVaultSettings keyVaultSettings = new KeyVaultSettings();
             configuration.BindOrThrow("KeyVaultSettings", keyVaultSettings);
