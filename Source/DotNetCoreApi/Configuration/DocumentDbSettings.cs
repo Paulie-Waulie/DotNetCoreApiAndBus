@@ -1,4 +1,4 @@
-﻿namespace DotNetCoreApi.Data
+﻿namespace DotNetCoreApi.Configuration
 {
     using System;
 
