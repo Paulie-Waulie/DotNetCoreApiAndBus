@@ -1,0 +1,269 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "paymentMethod": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the payment method being deployed"
+            }
+        },
+        "paymentMethodShort": {
+            "type": "string",
+            "defaultValue": "[parameters('paymentMethod')]",
+            "metadata": {
+                "description": "The short name of the payment method if required."
+            }
+        },
+        "environmentNameShort": {
+            "type": "string",
+            "metadata": {
+                "description": "The short name of the environment, e.g. t80, t46, pt02, pp, pd"
+            }
+        },
+        "deployingToMSDN": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Is the Azure subscription an MSDN subscription"
+            }
+        },
+        "tenantId": {
+            "type": "string",
+            "metadata": {
+                "description": "The Azure AD tenant id"
+            }
+        },
+        "healthCheckUri":
+        {
+            "type": "string",
+            "metadata": {
+                "description": "Relative URL of the health check"
+            }
+        },
+        "keyVaultAccessPolicies": {
+            "type": "array",
+            "metadata": {
+                "description": "Array of Key Vault access policies - uses the ARM AccessPolicyEntry object structure"
+            }
+        },
+        "cosmosDbAllowedIpRange": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "The ip Range allowed for accessiong the cosmos db."
+            }
+        },
+        "keyVaultSecrets": {
+            "type": "secureObject",
+            "defaultValue": { },
+            "metadata": {
+                "description": "Array of secrets to be added to the key vault."
+            }
+        },
+        "stage": {
+            "type": "string",
+            "allowedValues": ["prod","test","perf"]
+        }
+    },
+    "variables": {
+        "regionMap": {
+            "northeurope": {
+                "shortRegion": "eun",
+                "partnerRegion": "westeurope"
+            },
+            "westeurope": {
+                "shortRegion": "euw",
+                "partnerRegion": "northeurope"
+            }
+        },
+        "shortRegion": "[variables('regionMap')[resourceGroup().location].shortRegion]",
+        "cosmos-name": "[toLower(concat('demo-pay-cdb-', parameters('paymentMethod'), '-', variables('shortRegion'), '-', parameters('environmentNameShort')))]",
+        "appInsights-name": "[concat('Demo-PAY-AI-', parameters('paymentMethod'), '-', variables('shortRegion'), '-', parameters('environmentNameShort'))]",
+        "appInsights-billing-name": "[concat(variables('appInsights-name'), '-billing')]",
+        "keyVault-name": "[concat('DemoPAYKv', parameters('paymentMethodShort'), variables('shortRegion'), parameters('environmentNameShort'))]",
+        "cosmos-resourceName": "[concat('Microsoft.DocumentDB/databaseAccounts','/', variables('cosmos-name'))]",
+        "serviceBusSASPolicies": [
+            {
+                "secretName": "PaymentsServiceBusSendOnlyEUN",
+                "namespaceName": "[concat('Demo-ASB-Payments-eun-', parameters('environmentNameShort'))]",
+                "resourceGroup": "[concat('Demo-RG-Payments-eun-', parameters('environmentNameShort'))]",
+                "sasPolicyName": "SendOnlyKey"
+            },
+            {
+                "secretName": "PaymentsServiceBusSendAndListenEUN",
+                "namespaceName": "[concat('Demo-ASB-Payments-eun-', parameters('environmentNameShort'))]",
+                "resourceGroup": "[concat('Demo-RG-Payments-eun-', parameters('environmentNameShort'))]",
+                "sasPolicyName": "SendAndListenKey"
+            }
+        ]
+    },
+    "resources": [
+        {
+            "name": "[variables('cosmos-name')]",
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "apiVersion": "2015-04-08",
+            "location": "[resourceGroup().location]",
+            "kind": "GlobalDocumentDB",
+            "properties": {
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "BoundedStaleness",
+                    "maxStalenessPrefix": 100000,
+                    "maxIntervalInSeconds": 300
+                },
+                "databaseAccountOfferType": "Standard",
+                // Omitting ipRangFilter for simplicity.
+                // "ipRangeFilter": "[concat(parameters('cosmosDbAllowedIpRange'), ',', reference(variables('service-fabric-ip-address-id-backend-eun'), '2017-10-01').ipAddress, ',', reference(variables('service-fabric-ip-address-id-frontend-eun'), '2017-10-01').ipAddress, ',', reference(variables('service-fabric-ip-address-id-backend-euw'), '2017-10-01').ipAddress, ',', reference(variables('service-fabric-ip-address-id-frontend-euw'), '2017-10-01').ipAddress)]",
+                "locations": [
+                    {
+                        "failoverPriority": 0,
+                        "locationName": "[resourceGroup().location]"
+                      },
+                      {
+                        "failoverPriority": 1,
+                        "locationName": "[variables('regionMap')[resourceGroup().location].partnerRegion]"
+                      }
+                ],
+                "enableAutomaticFailover": true
+            },
+            "tags": {
+                "platform": "Demo-Payments",
+                "stage": "[parameters('stage')]"
+            }
+        },
+        {
+            "name": "[variables('appInsights-name')]",
+            "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
+            "location": "[resourceGroup().location]",
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web",
+                "applicationId": "[variables('appInsights-name')]"
+            },
+            "tags": {
+                "platform": "Payments",
+                "stage": "[parameters('stage')]"
+            }
+        },
+        {
+            "condition": "[not(parameters('deployingToMSDN'))]", // MSDN billing doesn't even allow you to setup billing even if you set a cap lower than the limit
+            "name": "[concat(variables('appInsights-name'), '/', variables('appInsights-billing-name'))]",
+            "type": "microsoft.insights/components/CurrentBillingFeatures",
+            "apiVersion": "2015-05-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', variables('appInsights-name'))]"
+            ],
+            "properties": {
+                "CurrentBillingFeatures": 1, // 1=Basic, 2=Enterprise
+                "DataVolumeCap": {
+                    "Cap": "500", // For MSDN you can't use more than 0.0323GB (32.3MB)
+                    "WarningThreshold": 90,
+                    "ResetTime": 0
+                }
+            }
+        },
+        {
+            "name": "[variables('keyVault-name')]",
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2016-10-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "tenantId": "[parameters('tenantId')]",
+                "sku": {
+                    "family": "A",
+                    "name": "standard"
+                },
+                "accessPolicies": "[parameters('keyVaultAccessPolicies')]",
+                "enabledForDeployment": "false",
+                "enabledForDiskEncryption": "false",
+                "enabledForTemplateDeployment": "false"
+            },
+            "tags": {
+                "platform": "Payments",
+                "stage": "[parameters('stage')]"
+            }
+        },
+        // This adds the cosmos db auth key fom the created resource to the key vault.
+        {
+            "name": "[concat(variables('keyVault-name'), '/DocumentDB--AuthKey')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2016-10-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "value": "[listKeys(variables('cosmos-resourceName'), '2015-04-08').primaryMasterKey]"
+            },
+            "dependsOn": [
+                "[variables('cosmos-name')]",
+                "[variables('keyVault-name')]"
+            ]
+        },
+        // This adds the cosmos db endpoint Uri from the created resource to the key vault.
+        {
+            "name": "[concat(variables('keyVault-name'), '/DocumentDB--EndpointUri')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2016-10-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "value": "[reference(variables('cosmos-resourceName')).documentEndpoint]"
+            },
+            "dependsOn": [
+                "[variables('cosmos-name')]",
+                "[variables('keyVault-name')]"
+            ]
+        },
+        // This adds the provided secrets as a parameter to the key vault.
+        {
+            "name": "[concat(variables('keyVault-name'), '/', parameters('keyVaultSecrets').secrets[copyIndex()].secretName)]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2016-10-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "value": "[parameters('keyVaultSecrets').secrets[copyIndex()].secretValue]"
+            },
+            "dependsOn": [
+                "[variables('keyVault-name')]"
+            ],
+            "copy": {
+                "name": "secretsCopy",
+                "count": "[length(parameters('keyVaultSecrets').secrets)]"
+            }
+        },
+        // This adds the provided ASB connection strings as secrets to key vault
+        {
+            "name": "[concat(variables('keyVault-name'), '/', variables('serviceBusSASPolicies')[copyIndex()].secretName)]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2016-10-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "value": "[listKeys(resourceId(variables('serviceBusSASPolicies')[copyIndex()].resourceGroup, 'Microsoft.ServiceBus/namespaces/authorizationRules', variables('serviceBusSASPolicies')[copyIndex()].namespaceName, variables('serviceBusSASPolicies')[copyIndex()].sasPolicyName), '2017-04-01').primaryConnectionString]"
+            },
+            "dependsOn": [
+                "[variables('keyVault-name')]"
+            ],
+            "copy": {
+                "name": "asbSecretsCopy",
+                "count": "[length(variables('serviceBusSASPolicies'))]"
+            }
+        }
+    ],
+    "outputs": {
+        "cosmos-uri": {
+            "value": "[reference(variables('cosmos-resourceName'), '2015-04-08').documentEndpoint]",
+            "type": "string"
+        },
+        "appInsights-instrumentationKey": {
+            "value": "[reference(concat('microsoft.insights/components/', variables('appInsights-name')), '2015-05-01').InstrumentationKey]",
+            "type": "string"
+        },
+        "keyvault-uri": {
+            "value": "[reference(concat('Microsoft.KeyVault/vaults/', variables('keyVault-name')), '2016-10-01').vaultUri]",
+            "type": "string"
+        },
+        "shortRegion": {
+            "value": "[variables('shortRegion')]",
+            "type": "string"
+        }
+    }
+}

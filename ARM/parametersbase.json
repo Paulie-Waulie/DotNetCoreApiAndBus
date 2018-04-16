@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "tenantId": {
+            "value": "YOUR_TENANT_ID"
+        },
+        "paymentMethod": {
+            "value": "demo-pay"
+        },
+        "paymentMethodShort": {
+            "value": "demo-p"
+        },
+        "environmentNameShort": {
+            "value": "t1"
+        },
+        "stage": {
+            "value": "test"
+        },
+        "healthCheckUri": {
+            "value": "/healthcheck"
+        },
+        "keyVaultAccessPolicies": {
+            "value": [
+                {
+                    "tenantId": "YOUR_TENANT_ID",
+                    "objectId": "YOUR_APP_REGISTRATION_OBJECT_ID",
+                    "permissions": {
+                        "keys": [],
+                        "secrets": [
+                            "get",
+                            "list"
+                        ],
+                        "certificates": []
+                    }
+                }
+            ]
+        },
+        // Below should use Secure Objects
+        "keyVaultSecrets": {
+            "value": {
+                "secrets": [
+                    {
+                        "secretName": "PaymentProviderUserId",
+                        "secretValue": "UserId"
+                    },
+                    {
+                        "secretName": "PaymentProviderUserPassword",
+                        "secretValue": "Password"
+                    }
+                ]
+            }
+        }
+        // "cosmosDbAllowedIpRange": {
+        //     "value": "52.169.213.18,104.42.195.92,208.170.20.133/32,208.170.20.133/32"
+        // }
+    }
+}
