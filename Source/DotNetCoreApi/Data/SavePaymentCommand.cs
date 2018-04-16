@@ -3,7 +3,7 @@
     using System.Threading.Tasks;
     using Configuration;
     using Contracts;
-    using global::Contracts.Models;
+    using global::Contracts.Rest;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
     using Microsoft.Extensions.Options;

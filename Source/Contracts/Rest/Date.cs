@@ -1,4 +1,4 @@
-﻿namespace Contracts.Models
+﻿namespace Contracts.Rest
 {
     public class Date
     {

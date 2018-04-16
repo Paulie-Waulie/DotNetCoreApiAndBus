@@ -3,7 +3,7 @@
     using System.Threading.Tasks;
     using Contracts;
     using Data;
-    using global::Contracts.Models;
+    using global::Contracts.Rest;
     using Provider.Query;
 
     public interface IPaymentService

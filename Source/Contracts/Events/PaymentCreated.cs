@@ -1,6 +1,6 @@
 ﻿namespace Contracts.Events
 {
-    using Models;
+    using Rest;
 
     public class PaymentCreated
     {

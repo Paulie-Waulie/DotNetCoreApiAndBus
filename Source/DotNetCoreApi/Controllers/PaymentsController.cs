@@ -1,7 +1,7 @@
 ﻿namespace DotNetCoreApi.Controllers
 {
     using System.Threading.Tasks;
-    using Contracts;
+    using global::Contracts.Rest;
     using Microsoft.AspNetCore.Mvc;
     using Service;
 

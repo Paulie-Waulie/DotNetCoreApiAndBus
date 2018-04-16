@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Configuration;
     using Contracts;
+    using global::Contracts.Rest;
     using Microsoft.Extensions.Options;
 
     public interface IGetPaymentProviderRedirectQuery

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Contracts.Models
+﻿namespace Contracts.Rest
 {
+    using System;
+
     public class Address
     {
         public Address()
