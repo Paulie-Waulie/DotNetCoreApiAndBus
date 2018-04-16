@@ -77,8 +77,8 @@ To help support local development, when the app runs within a development enviro
     },
     "KeyVaultSettings": {
         "DnsName": "The DNS name of your key vault",
-        "AppUserClientId": "Your Azure AD App Registration Application Client ID, will have been outputted by the "CreateTestResource.ps1 sccript",
-        "AppUserClientSecret": "Your Azure AD App Registration Key, will have been outputted by the "CreateTestResource.ps1 sccript"
+        "AppUserClientId": "Your Azure AD App Registration Application Client ID, will have been outputted by the CreateTestResource.ps1 sccript",
+        "AppUserClientSecret": "Your Azure AD App Registration Key, will have been outputted by the CreateTestResource.ps1 sccript"
     },
     "ServerSettings": {
         "ApiCertificateThumbprint": "The thumbprint of your TLS certificate, if using Https"
