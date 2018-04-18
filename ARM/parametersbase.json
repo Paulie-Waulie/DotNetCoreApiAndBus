@@ -41,11 +41,11 @@
             "value": {
                 "secrets": [
                     {
-                        "secretName": "PaymentProviderUserId",
+                        "secretName": "PaymentProvider--UserId",
                         "secretValue": "UserId"
                     },
                     {
-                        "secretName": "PaymentProviderUserPassword",
+                        "secretName": "PaymentProvider--UserPassword",
                         "secretValue": "Password"
                     }
                 ]
