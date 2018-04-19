@@ -8,6 +8,15 @@ Login-AzureRmAccount
 # Create Resource Group for Demo
 New-AzureRmResourceGroup "payments-spike" "North Europe" -Force
 
+# Create Pre-existing Service Bus Namespace
+$northEuropeBusRG = "Demo-RG-Payments-eun-$environment"
+
+New-AzureRmResourceGroup $northEuropeBusRG "North Europe" -Force
+
+New-AzureRmServiceBusNamespace -ResourceGroupName $northEuropeBusRG  -Location "North Europe" -Name "Demo-ASB-Payments-eun-$environment"
+New-AzureRmServiceBusAuthorizationRule -ResourceGroupName $northEuropeBusRG -Namespace "Demo-ASB-Payments-eun-$environment" -Name "SendOnlyKey" -Rights "Send"
+New-AzureRmServiceBusAuthorizationRule -ResourceGroupName $northEuropeBusRG -Namespace "Demo-ASB-Payments-eun-$environment" -Name "SendAndListenKey" -Rights "Send", "Listen"
+
 # Create AD App Registration
 $appName = "DotNetCoreDemoAppRegistration"
 $uri = "http://dotnetcoredemo"
@@ -49,13 +58,3 @@ else {
     echo "Application Client Secret : $secret"
     Write-Output ""
 }
-
-
-# Create Pre-existing Service Bus Namespace
-$northEuropeBusRG = "Demo-RG-Payments-eun-$environment"
-
-New-AzureRmResourceGroup $northEuropeBusRG "North Europe" -Force
-
-New-AzureRmServiceBusNamespace -ResourceGroupName $northEuropeBusRG  -Location "North Europe" -Name "Demo-ASB-Payments-eun-$environment"
-New-AzureRmServiceBusAuthorizationRule -ResourceGroupName $northEuropeBusRG -Namespace "Demo-ASB-Payments-eun-$environment" -Name "SendOnlyKey" -Rights "Send"
-New-AzureRmServiceBusAuthorizationRule -ResourceGroupName $northEuropeBusRG -Namespace "Demo-ASB-Payments-eun-$environment" -Name "SendAndListenKey" -Rights "Send", "Listen"
