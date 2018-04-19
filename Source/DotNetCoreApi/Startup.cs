@@ -23,10 +23,6 @@
         {
             services.AddMvc();
 
-            PaymentProviderSettings foo = new PaymentProviderSettings();
-            Configuration.BindOrThrow("PaymentProvider", foo);
-
-            services.Configure<DocumentDbSettings>(settings => { Configuration.BindOrThrow("DocumentDB", settings); } );
             services.Configure<PaymentProviderSettings>(settings => { Configuration.BindOrThrow("PaymentProvider", settings); } );
 
             services.AddSingleton<IPaymentService, PaymentService>()
