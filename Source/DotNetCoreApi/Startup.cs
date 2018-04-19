@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Middleware;
     using Provider.Query;
     using Service;
 
@@ -41,6 +42,7 @@
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<ExceptionHandling>();
             app.UseMvc();
             MappingConfiguration.Configure();
         }
