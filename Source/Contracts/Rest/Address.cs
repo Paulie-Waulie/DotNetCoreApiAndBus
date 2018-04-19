@@ -1,28 +1,7 @@
-﻿namespace Contracts.Rest
+﻿namespace DotNetCore.Contracts.Rest
 {
-    using System;
-
     public class Address
     {
-        public Address()
-        {
-            
-        }
-
-        public Address(string firstName, string lastName, string address1, string address2, string address3, string locality, string countyStateOrArea, string country, string postalCode, string telephoneMobile)
-        {
-            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
-            LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
-            Address1 = address1 ?? throw new ArgumentNullException(nameof(address1));
-            Address2 = address2 ?? throw new ArgumentNullException(nameof(address2));
-            Address3 = address3;
-            Locality = locality ?? throw new ArgumentNullException(nameof(locality));
-            CountyStateOrArea = countyStateOrArea;
-            Country = country ?? throw new ArgumentNullException(nameof(country));
-            PostalCode = postalCode ?? throw new ArgumentNullException(nameof(postalCode));
-            TelephoneMobile = telephoneMobile ?? throw new ArgumentNullException(nameof(telephoneMobile));
-        }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

@@ -1,33 +1,48 @@
 ﻿namespace DotNetCoreApi.Data
 {
+    using System;
+    using System.Net;
     using System.Threading.Tasks;
     using Configuration;
-    using Contracts;
-    using global::Contracts.Rest;
+    using Exceptions;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
     using Microsoft.Extensions.Options;
+    using Model;
 
     public interface ISavePaymentCommand
     {
-        Task Save(PaymentReference paymentReference, Payment payment);
+        Task Save(Payment payment);
     }
 
     internal class SavePaymentCommand : ISavePaymentCommand
     {
-        private readonly IDocumentClient documentClientFactory;
+        private readonly IDocumentClient documentClient;
         private readonly DocumentDbSettings dbSettings;
 
         public SavePaymentCommand(IDocumentClientFactory documentClientFactory, IOptions<DocumentDbSettings> dbSettings)
         {
             this.dbSettings = dbSettings.Value;
-            this.documentClientFactory = documentClientFactory.Create(this.dbSettings).Result;
+            this.documentClient = documentClientFactory.Create(this.dbSettings).Result;
         }
 
-        public Task Save(PaymentReference paymentReference, Payment payment)
+        public async Task Save(Payment payment)
         {
             var documentUri = UriFactory.CreateDocumentCollectionUri(this.dbSettings.DatabaseId, this.dbSettings.CollectionId);
-            return this.documentClientFactory.CreateDocumentAsync(documentUri, payment);
+            try
+            {
+                await this.documentClient.CreateDocumentAsync(documentUri, payment.Wrap(() => payment.PaymentReference.Value));
+            }
+            catch (DocumentClientException e)
+            {
+                if (e.StatusCode.Equals(HttpStatusCode.Conflict))
+                {
+                    throw new DuplicatePaymentException(payment.PaymentReference);
+                }
+
+                throw;
+            }
+            
         }
     }
 }

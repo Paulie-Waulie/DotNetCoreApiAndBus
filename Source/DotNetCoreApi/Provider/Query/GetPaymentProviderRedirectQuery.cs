@@ -4,12 +4,11 @@
     using System.Threading.Tasks;
     using Configuration;
     using Contracts;
-    using global::Contracts.Rest;
     using Microsoft.Extensions.Options;
 
     public interface IGetPaymentProviderRedirectQuery
     {
-        Task<PaymentRedirect> Get(Payment payment);
+        Task<PaymentRedirect> Get(global::DotNetCoreApi.Model.Payment payment);
     }
 
     public class GetPaymentProviderRedirectQuery : IGetPaymentProviderRedirectQuery
@@ -21,7 +20,7 @@
             this.paymentProviderSettings = paymentProviderSettings.Value;
         }
 
-        public Task<PaymentRedirect> Get(Payment payment)
+        public Task<PaymentRedirect> Get(Model.Payment payment)
         {
             // In reality, call the provider using the provided settings.
             return Task.FromResult(new PaymentRedirect(new Uri("https://paymentProvider/Redirect")));

@@ -1,4 +1,4 @@
-﻿namespace Contracts.Rest
+﻿namespace DotNetCore.Contracts.Values
 {
     using System;
 

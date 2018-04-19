@@ -1,4 +1,4 @@
-﻿namespace DotNetCore.Contracts.Rest
+﻿namespace DotNetCoreApi.Model
 {
     public class Customer
     {

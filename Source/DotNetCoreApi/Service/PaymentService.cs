@@ -3,12 +3,12 @@
     using System.Threading.Tasks;
     using Contracts;
     using Data;
-    using global::Contracts.Rest;
+    using DotNetCoreApi.Model;
     using Provider.Query;
 
     public interface IPaymentService
     {
-        Task<PaymentRedirect> RegisterAttempt(string paymentReference, Payment payment);
+        Task<PaymentRedirect> RegisterPayment(Payment payment);
     }
 
     public class PaymentService : IPaymentService
@@ -22,12 +22,11 @@
             this.savePaymentCommand = savePaymentCommand;
         }
 
-        public async Task<PaymentRedirect> RegisterAttempt(string paymentReference, Payment payment)
+        public async Task<PaymentRedirect> RegisterPayment(Payment payment)
         {
             // TODO : Validate.
-            PaymentReference reference = new PaymentReference(paymentReference);
             PaymentRedirect redirect = await this.getRedirectQuery.Get(payment);
-            await this.savePaymentCommand.Save(reference, payment);
+            await this.savePaymentCommand.Save(payment);
 
             return redirect;
         }

@@ -1,6 +1,7 @@
-﻿namespace Contracts.Events
+﻿namespace DotNetCore.Contracts.Events
 {
     using Rest;
+    using Values;
 
     public class PaymentCreated
     {

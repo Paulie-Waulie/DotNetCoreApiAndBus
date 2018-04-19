@@ -1,7 +1,8 @@
 ﻿namespace DotNetCoreApi.Controllers
 {
     using System.Threading.Tasks;
-    using global::Contracts.Rest;
+    using DotNetCore.Contracts.Rest;
+    using Mapping;
     using Microsoft.AspNetCore.Mvc;
     using Service;
 
@@ -24,7 +25,7 @@
         [HttpPut("{paymentReference}")]
         public async Task<CreatedAtActionResult> Put(string paymentReference, [FromBody]Payment value)
         {
-            var redirect = await this.paymentService.RegisterAttempt(paymentReference, value);
+            var redirect = await this.paymentService.RegisterPayment(value.ToModel(paymentReference));
             return this.CreatedAtAction("Get", new { id = paymentReference } ,redirect);
         }
     }

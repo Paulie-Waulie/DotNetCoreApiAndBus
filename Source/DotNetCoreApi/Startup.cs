@@ -2,6 +2,7 @@
 {
     using Configuration;
     using Data;
+    using Mapping;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -23,6 +24,7 @@
         {
             services.AddMvc();
 
+            services.Configure<DocumentDbSettings>(settings => { Configuration.BindOrThrow("DocumentDB", settings); } );
             services.Configure<PaymentProviderSettings>(settings => { Configuration.BindOrThrow("PaymentProvider", settings); } );
 
             services.AddSingleton<IPaymentService, PaymentService>()
@@ -40,6 +42,7 @@
             }
 
             app.UseMvc();
+            MappingConfiguration.Configure();
         }
     }
 }
