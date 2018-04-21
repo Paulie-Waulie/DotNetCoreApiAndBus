@@ -1,6 +1,5 @@
 ﻿namespace DotNetCoreApi.Data
 {
-    using System;
     using System.Net;
     using System.Threading.Tasks;
     using Configuration;
@@ -29,20 +28,22 @@
         public async Task Save(Payment payment)
         {
             var documentUri = UriFactory.CreateDocumentCollectionUri(this.dbSettings.DatabaseId, this.dbSettings.CollectionId);
+
             try
             {
                 await this.documentClient.CreateDocumentAsync(documentUri, payment.Wrap(() => payment.PaymentReference.Value));
             }
             catch (DocumentClientException e)
             {
-                if (e.StatusCode.Equals(HttpStatusCode.Conflict))
+                if (e.StatusCode.GetValueOrDefault().Equals(HttpStatusCode.Conflict))
                 {
                     throw new DuplicatePaymentException(payment.PaymentReference);
                 }
 
+                e.ThrowUnavailableExceptionIfErrored();
+
                 throw;
             }
-            
         }
     }
 }
