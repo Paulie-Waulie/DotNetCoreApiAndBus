@@ -1,7 +1,9 @@
 ﻿namespace DotNetCoreApi.Controllers
 {
     using System.Threading.Tasks;
+    using Data;
     using DotNetCore.Contracts.Rest;
+    using DotNetCore.Contracts.Values;
     using Mapping;
     using Microsoft.AspNetCore.Mvc;
     using Service;
@@ -10,16 +12,19 @@
     public class PaymentsController : Controller
     {
         private readonly IPaymentService paymentService;
+        private readonly IGetPaymentQuery getPaymentQuery;
 
-        public PaymentsController(IPaymentService paymentService)
+        public PaymentsController(IPaymentService paymentService, IGetPaymentQuery getPaymentQuery)
         {
             this.paymentService = paymentService;
+            this.getPaymentQuery = getPaymentQuery;
         }
 
         [HttpGet("{id}")]
-        public Payment Get(string id)
+        public async Task<Payment> Get(string id)
         {
-            return new Payment();
+            var model = await this.getPaymentQuery.Execute(id);
+            return model.ToContract();
         }
 
         [HttpPut("{paymentReference}")]

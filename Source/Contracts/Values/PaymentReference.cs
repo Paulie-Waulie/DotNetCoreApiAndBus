@@ -4,6 +4,11 @@
 
     public class PaymentReference
     {
+        public PaymentReference()
+            : this(Guid.NewGuid())
+        {
+        }
+
         public PaymentReference(Guid value)
         {
             this.Value = value;
@@ -14,7 +19,7 @@
         {
         }
 
-        public Guid Value { get; }
+        public Guid Value { get; private set; }
 
         public static PaymentReference Create()
         {

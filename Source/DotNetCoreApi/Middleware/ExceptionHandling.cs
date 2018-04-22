@@ -21,6 +21,7 @@
             this.telemetryClient = telemetryClient;
             this.exceptionToStatusCodes.AddMapping<DuplicatePaymentException>(HttpStatusCode.Conflict);
             this.exceptionToStatusCodes.AddMapping<DatabaseUnavailableException>(HttpStatusCode.ServiceUnavailable);
+            this.exceptionToStatusCodes.AddMapping<PaymentNotFoundException>(HttpStatusCode.NotFound);
         }
 
         public async Task Invoke(HttpContext context)

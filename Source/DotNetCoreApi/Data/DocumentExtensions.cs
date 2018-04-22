@@ -17,5 +17,10 @@ namespace DotNetCoreApi.Data
                 Document = obj
             };
         }
+
+        public static T Unwrap<T>(this DocumentObject<T> obj)
+        {
+            return obj.Document;
+        }
     }
 }

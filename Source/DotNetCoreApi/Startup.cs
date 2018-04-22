@@ -31,6 +31,7 @@
             services.AddSingleton<IPaymentService, PaymentService>()
                 .AddSingleton<IGetPaymentProviderRedirectQuery, GetPaymentProviderRedirectQuery>()
                 .AddSingleton<ISavePaymentCommand, SavePaymentCommand>()
+                .AddSingleton<IGetPaymentQuery, GetPaymentQuery>()
                 .AddSingleton<IDocumentClientFactory, DocumentClientFactory>();
         }
 

@@ -13,5 +13,10 @@
 
             return model;
         }
+
+        internal static DotNetCore.Contracts.Rest.Payment ToContract(this Payment model)
+        {
+            return Mapper.Map<DotNetCore.Contracts.Rest.Payment>(model);
+        }
     }
 }
