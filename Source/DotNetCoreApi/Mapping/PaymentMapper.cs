@@ -18,5 +18,10 @@
         {
             return Mapper.Map<DotNetCore.Contracts.Rest.Payment>(model);
         }
+
+        internal static DotNetCore.Contracts.Rest.PaymentRedirect ToContract(this PaymentRedirect model)
+        {
+            return new DotNetCore.Contracts.Rest.PaymentRedirect { RedirectPath = model.RedirectUri.AbsoluteUri };
+        }
     }
 }

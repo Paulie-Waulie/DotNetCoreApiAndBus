@@ -9,9 +9,7 @@ namespace DotNetCoreApi.Configuration
     {
         internal static void Configure(this KestrelServerOptions kestrelServerOptions, IConfiguration configuration)
         {
-            var secureSettings = new ServerSettings();
-            configuration.BindOrThrow("ServerSettings", secureSettings);
-
+            var secureSettings = configuration.GetSectionOrThrow<ServerSettings>();
             ConfigureListener(kestrelServerOptions, secureSettings);
         }
 
