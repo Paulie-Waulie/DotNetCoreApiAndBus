@@ -15,7 +15,7 @@
 
         internal IDotNetCoreApi Create()
         {
-            this.httpClientHandler = new HttpClientHandler { ServerCertificateCustomValidationCallback = ServerCertificateValidationCallback };
+            this.httpClientHandler = new HttpClientHandler { ServerCertificateCustomValidationCallback = this.ServerCertificateValidationCallback };
 
             if (FixtureSetup.ApiServerSettings.InProcess)
             {
@@ -35,8 +35,14 @@
 
         public void Dispose()
         {
-            httpClientHandler?.Dispose();
-            httpClient?.Dispose();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            this.httpClientHandler?.Dispose();
+            this.httpClient?.Dispose();
         }
 
         private bool ServerCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)

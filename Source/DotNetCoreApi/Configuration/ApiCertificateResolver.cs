@@ -34,7 +34,7 @@ namespace DotNetCoreApi.Configuration
             {
                 if (!cert.HasPrivateKey || cert.PrivateKey.KeySize == 0)
                 {
-                    throw new Exception("The certificate does not contain a Private Key or you don't have permission to access it.");
+                    throw new CertificateLoadException("The certificate does not contain a Private Key or you don't have permission to access it.");
                 }
             }
             catch (Exception e)

@@ -7,9 +7,9 @@
     [SetUpFixture]
     public class FixtureSetup
     {
-        public static IConfiguration Configuration;
+        public static IConfiguration Configuration { get; private set; }
 
-        public static ApiServerSettings ApiServerSettings;
+        public static ApiServerSettings ApiServerSettings { get; private set; }
 
         [OneTimeSetUp]
         public void Setup()

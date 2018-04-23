@@ -2,10 +2,15 @@
 {
     using System;
 
-    internal class CertificateLoadException : Exception
+    public class CertificateLoadException : Exception
     {
         public CertificateLoadException()
             : base("Could not load certificate")
+        {
+        }
+
+        public CertificateLoadException(string message)
+            :base (message)
         {
         }
 
