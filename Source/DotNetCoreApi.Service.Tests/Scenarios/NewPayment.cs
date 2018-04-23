@@ -6,6 +6,7 @@
     using Api;
     using AutoFixture;
     using DotNetCore.Contracts.Rest;
+    using DotNetCoreApi.Service.Tests.Attributes;
     using FluentAssertions;
     using NUnit.Framework;
     using TestDoubles;

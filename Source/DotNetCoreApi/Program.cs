@@ -7,7 +7,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
