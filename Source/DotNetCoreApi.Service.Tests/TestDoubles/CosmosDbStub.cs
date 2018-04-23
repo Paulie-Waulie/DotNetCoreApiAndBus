@@ -10,6 +10,7 @@
 
     internal class CosmosDbStub : ISavePaymentCommand, IGetPaymentQuery
     {
+        public const string DatabaseUnavailableControlReference = "66666666-6666-6666-6666-666666666666";
         private static readonly Dictionary<string, Payment> Payments = new Dictionary<string, Payment>();
 
         public Task Save(Payment payment)
@@ -39,7 +40,7 @@
 
         private void ThrowCosmosUnavailableIfTestReference(string paymentReference)
         {
-            if (paymentReference.Equals("66666666-6666-6666-6666-666666666666"))
+            if (paymentReference.Equals(DatabaseUnavailableControlReference))
             {
                 throw new CosmosDatabaseUnavailableException(HttpStatusCode.InternalServerError, new Exception());
             }

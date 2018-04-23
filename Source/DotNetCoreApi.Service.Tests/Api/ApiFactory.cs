@@ -24,8 +24,10 @@
             }
             else
             {
-                this.httpClient = new HttpClient(this.httpClientHandler);
-                this.httpClient.BaseAddress = new Uri(FixtureSetup.ApiServerSettings.BaseAddress);
+                this.httpClient = new HttpClient(this.httpClientHandler)
+                {
+                    BaseAddress = new Uri(FixtureSetup.ApiServerSettings.BaseAddress)
+                };
             }
 
             return RestService.For<IDotNetCoreApi>(this.httpClient);

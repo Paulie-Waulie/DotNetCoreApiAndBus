@@ -8,12 +8,13 @@
     using DotNetCore.Contracts.Rest;
     using FluentAssertions;
     using NUnit.Framework;
+    using TestDoubles;
     using TestStack.BDDfy;
 
     [TestFixture]
     public class NewPayment
     {
-        private const string DatabaseUnavailableControlReference = "66666666-6666-6666-6666-666666666666";
+        
         private Payment payment;
         private Guid paymentReference;
         private HttpResponseMessage response;
@@ -44,7 +45,7 @@
             this.Given(_ => _.AValidNewPayment())
                 .And(_ => _.TheDatabaseIsUnavailable())
                 .When(_ => _.TheCallToCreateAPaymentIsMade())
-                .Then(_ => _.ServiceUnavailableIsReturned())
+                .Then(_ => _.ServiceUnavailableResponseIsReturned())
                 .BDDfy();
         }
 
@@ -62,7 +63,7 @@
 
         private void TheDatabaseIsUnavailable()
         {
-            this.paymentReference = Guid.Parse(DatabaseUnavailableControlReference);
+            this.paymentReference = Guid.Parse(CosmosDbStub.DatabaseUnavailableControlReference);
         }
 
         private void TheCallToCreateAPaymentIsMade()
@@ -84,7 +85,7 @@
             this.response.StatusCode.Should().Be(HttpStatusCode.Conflict);
         }
 
-        private void ServiceUnavailableIsReturned()
+        private void ServiceUnavailableResponseIsReturned()
         {
             this.response.StatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
         }
