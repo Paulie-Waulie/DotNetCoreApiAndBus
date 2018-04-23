@@ -1,9 +1,8 @@
 ﻿namespace DotNetCoreApi.Service
 {
     using System.Threading.Tasks;
-    using Contracts;
     using Data;
-    using DotNetCoreApi.Model;
+    using Model;
     using Provider.Query;
 
     public interface IPaymentService

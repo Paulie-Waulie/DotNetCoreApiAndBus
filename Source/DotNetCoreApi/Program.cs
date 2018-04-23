@@ -7,7 +7,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -41,12 +41,10 @@
 
             // TODO : Work out why the instrumentation key below is ignored, the correct instrumentation key seems to be only
             // set if it is present in the appsettings.json or is passed to the overloaded extensions method on IWebHostBuilder called UseApplicationInsights.
-            var applicationInsightsSettings = new ApplicationInsightsSettings();
-            configuration.BindOrThrow("ApplicationInsights", applicationInsightsSettings);
+            var applicationInsightsSettings = configuration.GetSectionOrThrow<ApplicationInsightsSettings>("ApplicationInsights");
             builder.AddApplicationInsightsSettings(developerMode: environment.IsDevelopment(), instrumentationKey: applicationInsightsSettings.InstrumentationKey);
 
-            KeyVaultSettings keyVaultSettings = new KeyVaultSettings();
-            configuration.BindOrThrow("KeyVaultSettings", keyVaultSettings);
+            var keyVaultSettings = configuration.GetSectionOrThrow<KeyVaultSettings>("KeyVaultSettings");
 
             builder.AddAzureKeyVault(
                 keyVaultSettings.DnsName,

@@ -24,9 +24,13 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            this.AddDependencies(services);
+        }
 
-            services.Configure<DocumentDbSettings>(settings => { Configuration.BindOrThrow("DocumentDB", settings); } );
-            services.Configure<PaymentProviderSettings>(settings => { Configuration.BindOrThrow("PaymentProvider", settings); } );
+        protected virtual void AddDependencies(IServiceCollection services)
+        {
+            services.Configure<DocumentDbSettings>(settings => { Configuration.BindOrThrow("DocumentDB", settings); });
+            services.Configure<PaymentProviderSettings>(settings => { Configuration.BindOrThrow("PaymentProvider", settings); });
 
             services.AddSingleton<IPaymentService, PaymentService>()
                 .AddSingleton<IGetPaymentProviderRedirectQuery, GetPaymentProviderRedirectQuery>()

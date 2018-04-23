@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCoreApi", "DotNetCore
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCore.Contracts", "Contracts\DotNetCore.Contracts.csproj", "{0CD3B78F-EAAA-40F9-BA05-6BE52CA3BF45}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D419E5A6-2EDE-4807-92AF-AEB22E85FC58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCoreApi.Service.Tests", "DotNetCoreApi.Service.Tests\DotNetCoreApi.Service.Tests.csproj", "{551A0D2F-FF0A-485B-8344-160C249B2AB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +25,16 @@ Global
 		{0CD3B78F-EAAA-40F9-BA05-6BE52CA3BF45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CD3B78F-EAAA-40F9-BA05-6BE52CA3BF45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CD3B78F-EAAA-40F9-BA05-6BE52CA3BF45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{551A0D2F-FF0A-485B-8344-160C249B2AB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{551A0D2F-FF0A-485B-8344-160C249B2AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{551A0D2F-FF0A-485B-8344-160C249B2AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{551A0D2F-FF0A-485B-8344-160C249B2AB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{551A0D2F-FF0A-485B-8344-160C249B2AB2} = {D419E5A6-2EDE-4807-92AF-AEB22E85FC58}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C084CD76-0EEA-4A04-A038-B7CE23F8DFB8}

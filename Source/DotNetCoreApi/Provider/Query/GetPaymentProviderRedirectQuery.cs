@@ -3,8 +3,8 @@
     using System;
     using System.Threading.Tasks;
     using Configuration;
-    using Contracts;
     using Microsoft.Extensions.Options;
+    using Model;
 
     public interface IGetPaymentProviderRedirectQuery
     {

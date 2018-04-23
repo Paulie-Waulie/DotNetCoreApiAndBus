@@ -3,7 +3,6 @@
     using System.Net;
     using System.Threading.Tasks;
     using Configuration;
-    using DotNetCore.Contracts.Values;
     using Exceptions;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
@@ -13,7 +12,7 @@
 
     public interface IGetPaymentQuery
     {
-        Task<Payment> Execute(string paymentReference);
+        Task<Payment> Get(string paymentReference);
     }
 
     internal class GetPaymentQuery : IGetPaymentQuery
@@ -27,7 +26,7 @@
             this.documentClient = documentClientFactory.Create(this.dbSettings).Result;
         }
 
-        public async Task<Payment> Execute(string paymentReference)
+        public async Task<Payment> Get(string paymentReference)
         {
             var documentUri = UriFactory.CreateDocumentUri(dbSettings.DatabaseId, dbSettings.CollectionId, paymentReference);
 
