@@ -10,6 +10,7 @@
     using Middleware;
     using Provider.Query;
     using Service;
+    using Swashbuckle.AspNetCore.Swagger;
 
     public class Startup
     {
@@ -24,6 +25,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSwaggerGen(options => options.SwaggerDoc(SwaggerSettings.DocumentVersion, new Info { Title = SwaggerSettings.DocumentTitle, Version = SwaggerSettings.DocumentTitle }));
             this.AddDependencies(services);
         }
 
@@ -49,6 +51,13 @@
 
             app.UseMiddleware<ExceptionHandling>();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint(SwaggerSettings.JsonEndpointAddress, SwaggerSettings.DocumentVersion);
+                options.RoutePrefix = string.Empty;
+            });
+
             MappingConfiguration.Configure();
         }
     }
