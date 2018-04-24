@@ -88,6 +88,13 @@ To help support local development, when the app runs within a development enviro
 
 For more information see: https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.1&tabs=visual-studio
 
+## Tests
+
+As this is a simple Api project I have not created a traditional Unit Test project, instead I'm favouring simply having tests around the Api which can be ran against a depoyed instance or in process using the AspNet Test Server. This approach of seeing a unit as an operation works well when you either have a simple domain or a service which is optimized for replacability, i.e. a microservice philosophy that if I were to write another version of the Api, maybe in a different tech stack then I would start again from scratch. This also means that I can leverage the same exact same test cases so there is no concerns around translating BDD style acceptance tests to either a unit or a service test. 
+
+Using the test server in process also means that each test is using the whole MVC pipeline of the application, including middleware, for exmple the exception handling middleware. Refactoring is also easy to acheive as I can change the internals of the Api and as long as my tests are green (even better with a continous testing tool like NCrunch) then I know I am safe, easy Red Green refactoring!
+
+The only downside can come from the fidelity of the reporting from the tests, the service may return an unsuccessful status code like a 400 and from the test output it could be difficult to understand what is causing this, where tests aroudn the domain model could provide better feedback for failures, especially for a more complicated domain.
 
 ## License
 
