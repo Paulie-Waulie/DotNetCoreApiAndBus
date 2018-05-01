@@ -16,7 +16,7 @@
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -26,19 +26,10 @@
         {
             services.AddMvc();
             services.AddSwaggerGen(options => options.SwaggerDoc(SwaggerSettings.DocumentVersion, new Info { Title = SwaggerSettings.DocumentTitle, Version = SwaggerSettings.DocumentTitle }));
-            this.AddDependencies(services);
-        }
+            services.AddSingleton<IPaymentService, PaymentService>();
 
-        protected virtual void AddDependencies(IServiceCollection services)
-        {
-            services.Configure<DocumentDbSettings>(settings => { Configuration.BindOrThrow("DocumentDB", settings); });
-            services.Configure<PaymentProviderSettings>(settings => { Configuration.BindOrThrow("PaymentProvider", settings); });
-
-            services.AddSingleton<IPaymentService, PaymentService>()
-                .AddSingleton<IGetPaymentProviderRedirectQuery, GetPaymentProviderRedirectQuery>()
-                .AddSingleton<ISavePaymentCommand, SavePaymentCommand>()
-                .AddSingleton<IGetPaymentQuery, GetPaymentQuery>()
-                .AddSingleton<IDocumentClientFactory, DocumentClientFactory>();
+            this.AddInternalDependencies(services);
+            this.AddBoundaryDependencies(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +50,22 @@
             });
 
             MappingConfiguration.Configure();
+        }
+
+        protected virtual void AddBoundaryDependencies(IServiceCollection services)
+        {
+            services.Configure<DocumentDbSettings>(settings => { Configuration.BindOrThrow("DocumentDB", settings); });
+            services.Configure<PaymentProviderSettings>(settings => { Configuration.BindOrThrow("PaymentProvider", settings); });
+
+            services.AddSingleton<IGetPaymentProviderRedirectQuery, GetPaymentProviderRedirectQuery>()
+                .AddSingleton<ISavePaymentCommand, SavePaymentCommand>()
+                .AddSingleton<IGetPaymentQuery, GetPaymentQuery>()
+                .AddSingleton<IDocumentClientFactory, DocumentClientFactory>();
+        }
+
+        private void AddInternalDependencies(IServiceCollection services)
+        {
+            services.AddSingleton<IPaymentService, PaymentService>();
         }
     }
 }

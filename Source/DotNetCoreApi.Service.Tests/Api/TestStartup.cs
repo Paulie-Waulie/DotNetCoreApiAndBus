@@ -14,10 +14,9 @@
             Mapper.Reset();
         }
 
-        protected override void AddDependencies(IServiceCollection services)
+        protected override void AddBoundaryDependencies(IServiceCollection services)
         {
-            services.AddSingleton<IPaymentService, PaymentService>()
-                .AddSingleton<IGetPaymentProviderRedirectQuery, GetPaymentProviderRedirectQuery>()
+            services.AddSingleton<IGetPaymentProviderRedirectQuery, GetPaymentProviderRedirectQuery>()
                 .AddSingleton<ISavePaymentCommand, CosmosDbStub>()
                 .AddSingleton<IGetPaymentQuery, CosmosDbStub>();
         }
